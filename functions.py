@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def draw_landmarks_on_image(rgb_image, detection_result):
+def draw_landmarks_on_image_face(rgb_image, detection_result):
   face_landmarks_list = detection_result.face_landmarks
   annotated_image = np.copy(rgb_image)
 
@@ -29,9 +29,46 @@ def draw_landmarks_on_image(rgb_image, detection_result):
             image=annotated_image,
             landmark_list=face_landmarks_proto,
             connections=connections,
-            landmark_drawing_spec=None,
+            # landmark_drawing_spec=None,
             connection_drawing_spec=style
         )
 
   # Return the annotated image
   return annotated_image
+
+def draw_landmarks_on_image_body(rgb_image, detection_result):
+  pose_landmarks_list = detection_result.pose_landmarks
+  annotated_image = np.copy(rgb_image)
+
+  # Loop through the detected poses to visualize.
+  for pose_landmarks in pose_landmarks_list:
+    # Draw the pose landmarks.
+    pose_landmarks_proto = landmark_pb2.NormalizedLandmarkList()
+    pose_landmarks_proto.landmark.extend([
+        landmark_pb2.NormalizedLandmark(x=landmark.x, y=landmark.y, z=landmark.z) for landmark in pose_landmarks
+    ])
+
+    # for connections, style in [
+    #   (mp.solutions.pose.POSE_CONNECTIONS, mp.solutions.drawing_styles.get_default_pose_landmarks_style())
+    # ]:
+    #   for key, value in style.items():
+    #       print(key, ";", value)
+    #
+    #   solutions.drawing_utils.draw_landmarks(
+    #       image=annotated_image,
+    #       landmark_list=pose_landmarks_proto,
+    #       connections=connections,
+    #       connection_drawing_spec=style
+    #   )
+
+    # for key, value in mp.solutions.drawing_styles.get_default_pose_landmarks_style().items():
+    #    print(key, ";", value)
+
+    solutions.drawing_utils.draw_landmarks(
+        annotated_image,
+        pose_landmarks_proto,
+        solutions.pose.POSE_CONNECTIONS,
+        solutions.drawing_styles.get_default_pose_landmarks_style())
+
+  # Return the annotated image
+  return annotated_image 
