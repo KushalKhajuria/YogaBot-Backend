@@ -51,13 +51,13 @@ class Video:
             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             image = mp.Image(image_format=mp.ImageFormat.SRGB, data=image)
             
-            face_landmarker_result = self.face_landmarker.detect(image)
+            # face_landmarker_result = self.face_landmarker.detect(image)
             pose_landmarker_result = self.pose_landmarker.detect(image)
 
-            image1 = draw_landmarks_on_image_face(image.numpy_view(), face_landmarker_result)
-            image2 = draw_landmarks_on_image_body(image.numpy_view(), pose_landmarker_result)
+            # image1 = draw_landmarks_on_image_face(image.numpy_view(), face_landmarker_result)
+            image = draw_landmarks_on_image_body(image.numpy_view(), pose_landmarker_result)
 
-            image = cv2.addWeighted(image1, 0.5, image2, 0.5, 0)
+            # image = cv2.addWeighted(image1, 0.5, image2, 0.5, 0)
 
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
@@ -82,10 +82,14 @@ class Video:
             
             cv2.imshow('image', image)
 
+            cv2.imwrite('../FrontEnd-Alpha/src/main/resources/META-INF/resources/images/webcam.png', image);
+
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 #edit this to download image for experimental part of project
 
                 cv2.imwrite('image.jpg', image)
+
+                # cv2.imwrite('../FrontEnd-Alpha/src/main/resources/META-INF/resources/images/webcam.png', image);
 
                 #print(face_landmarker_result.face_blendshapes)
                 #print("\n\n\n")

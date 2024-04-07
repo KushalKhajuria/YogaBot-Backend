@@ -4,7 +4,6 @@ from video import Video
 import time
 
 from functions import *
-from openTask import *
 
 #import asyncio
 
