@@ -44,7 +44,7 @@ class Video:
         #    min_tracking_confidence=0.5) as holistic:
 
         #or tune parameters otherwise
-
+        count = 0
         while cap.isOpened():
             ret, frame = cap.read()
             image = cv2.flip(frame, 1)
@@ -62,7 +62,7 @@ class Video:
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
             cv2.namedWindow('image', cv2.WINDOW_NORMAL) #cv2.WINDOW_AUTOSIZE or cv2.WINDOW_NORMAL if you want to resize
-            cv2.resizeWindow('image', 1440, 810)
+            #cv2.resizeWindow('image', 1440, 810)
 
             #start_point = (640, 0)
             #end_point = (640, 720)
@@ -82,23 +82,9 @@ class Video:
             
             cv2.imshow('image', image)
 
-            cv2.imwrite('../FrontEnd-Alpha/src/main/resources/META-INF/resources/images/webcam.png', image);
+            #cv2.imwrite('../FrontEnd-Alpha/src/main/resources/META-INF/resources/images/webcam.png', image);
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                #edit this to download image for experimental part of project
-
-                cv2.imwrite('image.jpg', image)
-
-                # cv2.imwrite('../FrontEnd-Alpha/src/main/resources/META-INF/resources/images/webcam.png', image);
-
-                #print(face_landmarker_result.face_blendshapes)
-                #print("\n\n\n")
-                #print(face_landmarker_result.face_landmarks)
-                #print("\n\n\n")
-                print("landmarks" + str(pose_landmarker_result.pose_landmarks))
-                #print(face_landmarker_result.facial_transformation_matrixes)
-                #print(face_landmarker_result.timestampMs)
-
+            if (count==50):
                 spring_boot_url = "http://localhost:8080/test/numeric_data"
 
                 landmarks_xy = []
@@ -118,6 +104,25 @@ class Video:
                     spring_boot_url,
                     data=data_payload,
                     headers = headers)
+
+                count = 0;
+
+            count+=1
+
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                #edit this to download image for experimental part of project
+
+                #cv2.imwrite('image.jpg', image)
+
+                # cv2.imwrite('../FrontEnd-Alpha/src/main/resources/META-INF/resources/images/webcam.png', image);
+
+                #print(face_landmarker_result.face_blendshapes)
+                #print("\n\n\n")
+                #print(face_landmarker_result.face_landmarks)
+                #print("\n\n\n")
+                print("landmarks" + str(pose_landmarker_result.pose_landmarks))
+                #print(face_landmarker_result.facial_transformation_matrixes)
+                #print(face_landmarker_result.timestampMs)
 
                 print("data_payload" + data_payload)
                 print("landmarks_xy" + str(landmarks_xy))
